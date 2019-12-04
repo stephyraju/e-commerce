@@ -43,8 +43,6 @@ def login(request):
 
     args = {'user_form': user_form, 'next': request.GET.get('next', '')}
     return render(request, 'login.html', args)
-
-
 @login_required
 def profile(request):
     """A view that displays the profile page of a logged in user"""
