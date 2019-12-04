@@ -20,29 +20,30 @@ def logout(request):
 
 
 def login(request):
-    """A view that manages the login form"""
-    if request.method == 'POST':
-        user_form = UserLoginForm(request.POST)
-        if user_form.is_valid():
-            user = auth.authenticate(request.POST['username_or_email'],
-                                     password=request.POST['password'])
+    """ Logs the user into the app """
+    #login_form = UserLoginForm()
+    if request.user.is_authenticated:
+        return redirect(reverse("index"))
 
+    if request.method=="POST":
+        login_form = UserLoginForm(request.POST)
+        if login_form.is_valid():
+            user = auth.authenticate(
+                username=request.POST["username"],
+                password=request.POST["password"])
             if user:
-                auth.login(request, user)
-                messages.error(request, "You have successfully logged in")
-
-                if request.GET and request.GET['next'] !='':
-                    next = request.GET['next']
-                    return HttpResponseRedirect(next)
-                else:
-                    return redirect(reverse('index'))
+                auth.login(user=user, request=request)
+                messages.success(
+                    request, "You have been successfully logged in!")
+                return redirect(reverse("index"))
             else:
-                user_form.add_error(None, "Your username or password are incorrect")
+                login_form.add_error(
+                    None, "Your username or password is incorrect.")
     else:
-        user_form = UserLoginForm()
+        login_form = UserLoginForm()
 
-    args = {'user_form': user_form, 'next': request.GET.get('next', '')}
-    return render(request, 'login.html', args)
+    return render(request, "login.html", {"login_form": login_form})
+    
 @login_required
 def profile(request):
     """A view that displays the profile page of a logged in user"""
