@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [os.environ.get('C2_HOSTNAME'),'stephy-ecommerce.herokuapp.com']
-ALLOWED_HOSTS =['0.0.0.0']
+
 
 # Application definition
 
