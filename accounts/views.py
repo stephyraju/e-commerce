@@ -24,11 +24,9 @@ def login(request):
     if request.method == 'POST':
         user_form = UserLoginForm(request.POST)
         if user_form.is_valid():
-            # user = auth.authenticate(request.POST['username_or_email'],
-            #                          password=request.POST['password'])
-             user = auth.authenticate(
-                username=request.POST["username"],
-                password=request.POST["password"])
+            user = auth.authenticate(request.POST['username_or_email'],
+                                     password=request.POST['password'])
+
             if user:
                 auth.login(request, user)
                 messages.error(request, "You have successfully logged in")
@@ -46,7 +44,7 @@ def login(request):
     args = {'user_form': user_form, 'next': request.GET.get('next', '')}
     return render(request, 'login.html', args)
 
-
+    
 @login_required
 def profile(request):
     """A view that displays the profile page of a logged in user"""
